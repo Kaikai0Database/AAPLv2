@@ -40,8 +40,8 @@ def parseFasta(filepath: str) -> list[dict]:
     Handles multi-line sequences and skips blank lines.
     """
     records = []
-    current_id = None
-    current_seq = []
+    currentId = None
+    currentSeq = []
 
     with open(filepath, 'r', encoding='utf-8') as f:
         for line in f:
@@ -49,16 +49,16 @@ def parseFasta(filepath: str) -> list[dict]:
             if not line:
                 continue
             if line.startswith('>'):
-                if current_id is not None:
-                    records.append({'id': current_id, 'seq': ''.join(current_seq)})
-                current_id = line[1:]  # remove '>'
-                current_seq = []
+                if currentId is not None:
+                    records.append({'id': currentId, 'seq': ''.join(currentSeq)})
+                currentId = line[1:]  # remove '>'
+                currentSeq = []
             else:
-                current_seq.append(line)
+                currentSeq.append(line)
 
     # Don't forget the last record
-    if current_id is not None and current_seq:
-        records.append({'id': current_id, 'seq': ''.join(current_seq)})
+    if currentId is not None and currentSeq:
+        records.append({'id': currentId, 'seq': ''.join(currentSeq)})
 
     return records
 
@@ -131,14 +131,14 @@ SUPPORTED_MODELS = [
 
 def parseArgs():
     parser = argparse.ArgumentParser(
-        description="AAP Predictor — Anti-Antimicrobial Peptide prediction using ESM2 + CNN1D+Linear",
+        description="AAP Predictor -- Anti-Antimicrobial Peptide prediction using ESM2 + CNN1D+Linear",
         formatter_class=argparse.RawTextHelpFormatter,
     )
     parser.add_argument(
         '--input', '-i', required=True,
         help='Path to input file. Accepted formats:\n'
-             '  .fasta / .fa  — FASTA format (will prompt for label)\n'
-             '  .csv          — CSV with a "seq" column (and optionally "label")'
+             '  .fasta / .fa  -- FASTA format (will prompt for label)\n'
+             '  .csv          -- CSV with a "seq" column (and optionally "label")'
     )
     parser.add_argument(
         '--cls_model', '-c', required=True,
@@ -178,7 +178,7 @@ def parseArgs():
 def main():
     args = parseArgs()
 
-    # ── 1. Load input ──────────────────────────────────────
+    # -- 1. Load input --------------------------------------------------
     ext = os.path.splitext(args.input)[1].lower()
     if ext in ('.fasta', '.fa'):
         df = fastaToDataframe(args.input)
@@ -190,36 +190,36 @@ def main():
 
     print(f"[Info] Input loaded: {len(df)} sequence(s)\n")
 
-    # ── 2. Load predictor ──────────────────────────────────
+    # -- 2. Load predictor ----------------------------------------------
     predictor = AAPPredictor(
-        cls_path=args.cls_model,
-        model_type=args.model_type,
-        esm_type=args.esm_type,
-        padding_num=args.padding_num,
-        batch_size=args.batch_size,
+        clsPath=args.cls_model,
+        modelType=args.model_type,
+        esmType=args.esm_type,
+        paddingNum=args.padding_num,
+        batchSize=args.batch_size,
         threshold=args.threshold,
     )
 
-    # ── 3. Run inference ───────────────────────────────────
+    # -- 3. Run inference -----------------------------------------------
     print("\n[Info] Running inference...")
-    result_df = predictor.predict(df)
+    resultDf = predictor.predict(df)
 
-    # ── 4. Print summary ───────────────────────────────────
-    total = len(result_df)
-    n_pos = (result_df['predicted_label'] == 1).sum()
-    n_neg = (result_df['predicted_label'] == 0).sum()
+    # -- 4. Print summary -----------------------------------------------
+    total = len(resultDf)
+    nPos = (resultDf['predicted_label'] == 1).sum()
+    nNeg = (resultDf['predicted_label'] == 0).sum()
     print(f"\n{'─'*50}")
     print(f"  Prediction Summary")
     print(f"{'─'*50}")
     print(f"  Total sequences  : {total}")
-    print(f"  Predicted AMP    : {n_pos}  ({100*n_pos/total:.1f}%)")
-    print(f"  Predicted non-AMP: {n_neg}  ({100*n_neg/total:.1f}%)")
+    print(f"  Predicted AMP    : {nPos}  ({100*nPos/total:.1f}%)")
+    print(f"  Predicted non-AMP: {nNeg}  ({100*nNeg/total:.1f}%)")
     print(f"  Threshold used   : {args.threshold}")
     print(f"{'─'*50}\n")
 
-    # ── 5. Save output ─────────────────────────────────────
+    # -- 5. Save output -------------------------------------------------
     os.makedirs(os.path.dirname(os.path.abspath(args.output)), exist_ok=True)
-    result_df.to_csv(args.output, index=False)
+    resultDf.to_csv(args.output, index=False)
     print(f"[OK] Results saved to: {args.output}\n")
 
 
