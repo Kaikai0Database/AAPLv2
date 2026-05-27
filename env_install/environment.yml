@@ -1,4 +1,4 @@
-name: esm_test
+name: aap
 channels:
   - defaults
 dependencies:
@@ -75,4 +75,4 @@ dependencies:
     - xxhash==3.4.1
     - yarl==1.9.4
     - zipp==3.19.2
-prefix: C:\Users\user\anaconda3\envs\esm_test
+prefix: C:\Users\user\anaconda3\envs\aap
