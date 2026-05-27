@@ -159,14 +159,24 @@ AAP/
 
 ## 📖 Citation
 
-If you use this tool in your research, please cite:
+If you find this repository or our research useful, please cite our paper:
 
+### APA Format
+Datta, S., Yu, J. C., Lin, Y. H., Cheng, Y. C., & Chen, C. T. (2024). AMPpred-Web: a web-based platform integrating physicochemical and compositional features for antimicrobial peptide prediction. *Scientific Reports*, *14*(1), 14510. https://doi.org/10.1038/s41598-024-65062-9
+
+### BibTeX
 ```bibtex
-@article{TODO,
-  title   = {TODO: Add paper title},
-  author  = {TODO: Add authors},
-  journal = {TODO},
-  year    = {TODO}
+@article{datta2024amppred,
+  author    = {Datta, Saptashwa and Yu, Jen-Chieh and Lin, Yi-Hsiang and Cheng, Yun-Chen and Chen, Ching-Tai},
+  title     = {AMPpred-Web: a web-based platform integrating physicochemical and compositional features for antimicrobial peptide prediction},
+  journal   = {Scientific Reports},
+  year      = {2024},
+  volume    = {14},
+  number    = {1},
+  pages     = {14510},
+  doi       = {10.1038/s41598-024-65062-9},
+  url       = {https://doi.org/10.1038/s41598-024-65062-9},
+  publisher = {Nature Publishing Group}
 }
 ```
 
