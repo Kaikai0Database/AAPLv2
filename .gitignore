@@ -1,0 +1,64 @@
+# ─────────────────────────────────────────────
+# Private: Training data & process
+# ─────────────────────────────────────────────
+
+# Local ESM2 pretrain model files (auto-downloaded at runtime; too large for git)
+esm_pretrain_model/
+
+# Internal handover document (not for public)
+forHandoverREADME.txt
+舊版/
+
+# Raw training datasets
+data/
+
+# Training entry scripts
+main_esm_train.py
+main_script.py
+
+# Training class (contains full training loop)
+mainclass/class_esm_train.py
+
+# Old coupled test script (depends on loss.xlsx)
+main_esm_test.py
+mainclass/class_esm_test.py
+
+# Experimental scores & analysis records
+score/
+pic/
+
+# Trained model checkpoints directory (use Hugging Face instead)
+model/
+ModelDetail/
+
+# Office temp files & analysis outputs
+~$*
+*.pptx
+*.docx
+*.xlsx
+DNNanalysis_new.xlsx
+pepAnalysis.pptx
+流程圖DNN.pptx
+AAPL_result.docx
+
+# ─────────────────────────────────────────────
+# Python & environment
+# ─────────────────────────────────────────────
+__pycache__/
+*.py[cod]
+*.pyo
+.env
+*.egg-info/
+dist/
+build/
+
+# Conda environment lock files (keep yml, ignore local cache)
+.conda/
+
+# ─────────────────────────────────────────────
+# OS / editor
+# ─────────────────────────────────────────────
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
