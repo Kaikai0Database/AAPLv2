@@ -81,14 +81,14 @@ def fastaToDataframe(filepath: str) -> pd.DataFrame:
     print()
 
     while True:
-        raw = input("   Is this file POSITIVE (AMP) or NEGATIVE (non-AMP)? Enter [ 1 / 0 / skip ]: ").strip().lower()
+        raw = input("   Is this file POSITIVE (AAP) or NEGATIVE (non-AAP)? Enter [ 1 / 0 / skip ]: ").strip().lower()
         if raw == '1':
             label = 1
-            print(f"   [OK] Label set to 1 (Positive / AMP)\n")
+            print(f"   [OK] Label set to 1 (Positive / AAP)\n")
             break
         elif raw == '0':
             label = 0
-            print(f"   [OK] Label set to 0 (Negative / non-AMP)\n")
+            print(f"   [OK] Label set to 0 (Negative / non-AAP)\n")
             break
         elif raw == 'skip':
             label = -1
@@ -212,8 +212,8 @@ def main():
     print(f"  Prediction Summary")
     print(f"{'─'*50}")
     print(f"  Total sequences  : {total}")
-    print(f"  Predicted AMP    : {nPos}  ({100*nPos/total:.1f}%)")
-    print(f"  Predicted non-AMP: {nNeg}  ({100*nNeg/total:.1f}%)")
+    print(f"  Predicted AAP    : {nPos}  ({100*nPos/total:.1f}%)")
+    print(f"  Predicted non-AAP: {nNeg}  ({100*nNeg/total:.1f}%)")
     print(f"  Threshold used   : {args.threshold}")
     print(f"{'─'*50}\n")
 

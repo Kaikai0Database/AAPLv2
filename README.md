@@ -2,7 +2,7 @@
 
 > **Anti-Antimicrobial Peptide (AAP) prediction** using ESM2 protein language model + CNN1D+Linear classifier.
 
-This repository provides **inference-only** scripts to predict whether a given peptide sequence is an Anti-Antimicrobial Peptide (AAP / non-AMP) using our pre-trained models.
+This repository provides **inference-only** scripts to predict whether a given peptide sequence is an Anti-Antimicrobial Peptide (AAP / non-AAP) using our pre-trained models.
 
 ---
 
@@ -90,8 +90,8 @@ You will be prompted to specify the label for sequences in the FASTA file:
    Found 10 sequence(s).
 
    Please specify the class label for ALL sequences in this file.
-   Is this file POSITIVE (AMP) or NEGATIVE (non-AMP)? Enter [ 1 / 0 / skip ]: 1
-   ✅ Label set to 1 (Positive / AMP)
+   Is this file POSITIVE (AAP) or NEGATIVE (non-AAP)? Enter [ 1 / 0 / skip ]: 1
+   ✅ Label set to 1 (Positive / AAP)
 ```
 
 ### Input from CSV
@@ -126,7 +126,7 @@ The output CSV contains the original columns plus:
 | Column | Description |
 |--------|-------------|
 | `prediction_score` | Model confidence (0.0 – 1.0) |
-| `predicted_label` | Binary prediction: `1` = AMP, `0` = non-AMP |
+| `predicted_label` | Binary prediction: `1` = AAP, `0` = non-AAP |
 
 Example output:
 
