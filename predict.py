@@ -34,7 +34,7 @@ from mainclass.predictor import AAPPredictor
 # FASTA Parser
 # ──────────────────────────────────────────────
 
-def parse_fasta(filepath: str) -> list[dict]:
+def parseFasta(filepath: str) -> list[dict]:
     """
     Parse a FASTA file into a list of {'id': ..., 'seq': ...} dicts.
     Handles multi-line sequences and skips blank lines.
@@ -63,39 +63,39 @@ def parse_fasta(filepath: str) -> list[dict]:
     return records
 
 
-def fasta_to_dataframe(filepath: str) -> pd.DataFrame:
+def fastaToDataframe(filepath: str) -> pd.DataFrame:
     """
     Convert a FASTA file to a DataFrame with columns: id, seq, label.
     Prompts the user to specify the label (pos=1 / neg=0 / skip).
     """
-    records = parse_fasta(filepath)
+    records = parseFasta(filepath)
     if not records:
-        print(f"❌ No sequences found in: {filepath}")
+        print(f"[Error] No sequences found in: {filepath}")
         sys.exit(1)
 
-    print(f"\n📄 FASTA file detected: {filepath}")
+    print(f"\n[Info] FASTA file detected: {filepath}")
     print(f"   Found {len(records)} sequence(s).")
     print()
     print("   Please specify the class label for ALL sequences in this file.")
-    print("   This label is used for result tracking only — it does not affect the prediction score.")
+    print("   This label is used for result tracking only -- it does not affect the prediction score.")
     print()
 
     while True:
         raw = input("   Is this file POSITIVE (AMP) or NEGATIVE (non-AMP)? Enter [ 1 / 0 / skip ]: ").strip().lower()
         if raw == '1':
             label = 1
-            print(f"   ✅ Label set to 1 (Positive / AMP)\n")
+            print(f"   [OK] Label set to 1 (Positive / AMP)\n")
             break
         elif raw == '0':
             label = 0
-            print(f"   ✅ Label set to 0 (Negative / non-AMP)\n")
+            print(f"   [OK] Label set to 0 (Negative / non-AMP)\n")
             break
         elif raw == 'skip':
             label = -1
-            print(f"   ⚠️  Label skipped. 'label' column will be set to -1.\n")
+            print(f"   [Warning] Label skipped. 'label' column will be set to -1.\n")
             break
         else:
-            print("   ⚠️  Invalid input. Please enter 1, 0, or skip.")
+            print("   [Warning] Invalid input. Please enter 1, 0, or skip.")
 
     df = pd.DataFrame(records)
     df['label'] = label
@@ -106,14 +106,14 @@ def fasta_to_dataframe(filepath: str) -> pd.DataFrame:
 # CSV Loader
 # ──────────────────────────────────────────────
 
-def load_csv(filepath: str) -> pd.DataFrame:
+def loadCsv(filepath: str) -> pd.DataFrame:
     """Load a CSV file and validate required columns."""
     df = pd.read_csv(filepath)
     if 'seq' not in df.columns:
-        print(f"❌ CSV file must contain a 'seq' column. Found columns: {list(df.columns)}")
+        print(f"[Error] CSV file must contain a 'seq' column. Found columns: {list(df.columns)}")
         sys.exit(1)
     if 'label' not in df.columns:
-        print("   ⚠️  No 'label' column found in CSV. Predictions will be made without ground-truth labels.")
+        print("   [Warning] No 'label' column found in CSV. Predictions will be made without ground-truth labels.")
         df['label'] = -1
     return df
 
@@ -129,7 +129,7 @@ SUPPORTED_MODELS = [
 ]
 
 
-def parse_args():
+def parseArgs():
     parser = argparse.ArgumentParser(
         description="AAP Predictor — Anti-Antimicrobial Peptide prediction using ESM2 + CNN1D+Linear",
         formatter_class=argparse.RawTextHelpFormatter,
@@ -176,19 +176,19 @@ def parse_args():
 
 
 def main():
-    args = parse_args()
+    args = parseArgs()
 
     # ── 1. Load input ──────────────────────────────────────
     ext = os.path.splitext(args.input)[1].lower()
     if ext in ('.fasta', '.fa'):
-        df = fasta_to_dataframe(args.input)
+        df = fastaToDataframe(args.input)
     elif ext == '.csv':
-        df = load_csv(args.input)
+        df = loadCsv(args.input)
     else:
-        print(f"❌ Unsupported file format: '{ext}'. Please use .fasta, .fa, or .csv")
+        print(f"[Error] Unsupported file format: '{ext}'. Please use .fasta, .fa, or .csv")
         sys.exit(1)
 
-    print(f"📊 Input loaded: {len(df)} sequence(s)\n")
+    print(f"[Info] Input loaded: {len(df)} sequence(s)\n")
 
     # ── 2. Load predictor ──────────────────────────────────
     predictor = AAPPredictor(
@@ -201,7 +201,7 @@ def main():
     )
 
     # ── 3. Run inference ───────────────────────────────────
-    print("\n🚀 Running inference...")
+    print("\n[Info] Running inference...")
     result_df = predictor.predict(df)
 
     # ── 4. Print summary ───────────────────────────────────
@@ -220,7 +220,7 @@ def main():
     # ── 5. Save output ─────────────────────────────────────
     os.makedirs(os.path.dirname(os.path.abspath(args.output)), exist_ok=True)
     result_df.to_csv(args.output, index=False)
-    print(f"✅ Results saved to: {args.output}\n")
+    print(f"[OK] Results saved to: {args.output}\n")
 
 
 if __name__ == '__main__':

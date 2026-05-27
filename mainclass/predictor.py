@@ -84,16 +84,16 @@ class AAPPredictor:
         self.esm_layer = cfg['layer']
         self.input_dim = cfg['dim']
 
-        print(f"🔄 Loading ESM2 backbone ({esm_type}) — auto-downloading if not cached...")
+        print(f"[Info] Loading ESM2 backbone ({esm_type}) -- auto-downloading if not cached...")
         import esm as esm_lib
         esm_fn = getattr(esm_lib.pretrained, cfg['fn'])
         self.esm_model, alphabet = esm_fn()
         self.esm_model = self.esm_model.to(device)
         self.esm_model.eval()
         self.batch_converter = alphabet.get_batch_converter()
-        print(f"✅ ESM2 backbone loaded.")
+        print(f"[OK] ESM2 backbone loaded.")
 
-        print(f"🔄 Loading classifier: {cls_path}")
+        print(f"[Info] Loading classifier: {cls_path}")
         self.classifier = multiClassifier(
             model_type=model_type,
             input_dim=self.input_dim,
@@ -106,8 +106,7 @@ class AAPPredictor:
             torch.load(cls_path, map_location=device)
         )
         self.classifier.eval()
-        print(f"✅ Classifier loaded ({model_type}).")
-
+        print(f"[OK] Classifier loaded ({model_type}).")
     def predict(self, df: pd.DataFrame) -> pd.DataFrame:
         """
         Run inference on a DataFrame.
