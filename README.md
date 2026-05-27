@@ -162,18 +162,18 @@ AAP/
 If you find this repository or our research useful, please cite our paper:
 
 ### APA Format
-Datta, S., Yu, J. C., Lin, Y. H., Cheng, Y. C., & Chen, C. T. (2024). AMPpred-Web: a web-based platform integrating physicochemical and compositional features for antimicrobial peptide prediction. *Scientific Reports*, *14*(1), 14510. https://doi.org/10.1038/s41598-024-65062-9
+Lee, Y. C., Yu, J. C., Ni, K., Lin, Y. C., & Chen, C. T. (2024). Improved prediction of anti-angiogenic peptides based on machine learning models and comprehensive features from peptide sequences. *Scientific Reports*, *14*(1), 14387. https://doi.org/10.1038/s41598-024-65062-9
 
 ### BibTeX
 ```bibtex
-@article{datta2024amppred,
-  author    = {Datta, Saptashwa and Yu, Jen-Chieh and Lin, Yi-Hsiang and Cheng, Yun-Chen and Chen, Ching-Tai},
-  title     = {AMPpred-Web: a web-based platform integrating physicochemical and compositional features for antimicrobial peptide prediction},
+@article{lee2024improved,
+  author    = {Lee, Yun-Chen and Yu, Jen-Chieh and Ni, Kuan and Lin, Yu-Chuan and Chen, Ching-Tai},
+  title     = {Improved prediction of anti-angiogenic peptides based on machine learning models and comprehensive features from peptide sequences},
   journal   = {Scientific Reports},
   year      = {2024},
   volume    = {14},
   number    = {1},
-  pages     = {14510},
+  pages     = {14387},
   doi       = {10.1038/s41598-024-65062-9},
   url       = {https://doi.org/10.1038/s41598-024-65062-9},
   publisher = {Nature Publishing Group}
