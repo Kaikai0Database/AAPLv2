@@ -9,23 +9,25 @@ Supports both FASTA and CSV input formats.
 
 Usage examples
 --------------
-# Predict from FASTA (will prompt for label)
-python predict.py --input example_input/example.fasta --cls_model pretrained_weights/CNN1D+Linear/cls.pt
+# Predict from FASTA using default CNN1D+Linear model (locally cached in model/CNN1D+Linear/)
+python predict.py --input example_input/example.fasta
 
-# Predict from CSV
-python predict.py --input my_sequences.csv --cls_model pretrained_weights/CNN1D+Linear/cls.pt
+# Predict from CSV using default model
+python predict.py --input my_sequences.csv
 
-# Specify model type and output path
-python predict.py --input example_input/example.fasta \\
-                  --cls_model pretrained_weights/CNN1D+Linear/cls.pt \\
-                  --model_type CNN1D+Linear \\
-                  --esm_type t12 \\
+# Specify custom weights and types
+python predict.py --input example_input/example.fasta \
+                  --cls_model model/CNN1D+Linear/cls_34.pt \
+                  --esm_model model/CNN1D+Linear/esm_34.pt \
+                  --model_type CNN1D+Linear \
+                  --esm_type t12 \
                   --output results/my_prediction.csv
 """
 
 import argparse
 import os
 import sys
+from typing import List, Dict
 import pandas as pd
 
 from mainclass.predictor import AAPPredictor
@@ -34,7 +36,7 @@ from mainclass.predictor import AAPPredictor
 # FASTA Parser
 # ──────────────────────────────────────────────
 
-def parseFasta(filepath: str) -> list[dict]:
+def parseFasta(filepath: str) -> List[Dict]:
     """
     Parse a FASTA file into a list of {'id': ..., 'seq': ...} dicts.
     Handles multi-line sequences and skips blank lines.
@@ -141,9 +143,19 @@ def parseArgs():
              '  .csv          -- CSV with a "seq" column (and optionally "label")'
     )
     parser.add_argument(
-        '--cls_model', '-c', required=True,
-        help='Path to classifier weights (cls.pt).\n'
-             'Download from Hugging Face: see README.md for the link.'
+        '--cls_model', '-c',
+        default='model/CNN1D+Linear/cls_34.pt',
+        help='Path to classifier weights (cls_34.pt).\n'
+             'Default: model/CNN1D+Linear/cls_34.pt\n'
+             'Download from: https://huggingface.co/CHENLIKAI/AAPL_esm-2-t12'
+    )
+    parser.add_argument(
+        '--esm_model', '-esm',
+        default='model/CNN1D+Linear/esm_34.pt',
+        help='Path to fine-tuned ESM weights (esm_34.pt).\n'
+             'Default: model/CNN1D+Linear/esm_34.pt\n'
+             'Set to "none" or "None" to use raw pretrained ESM2.\n'
+             'Download from: https://huggingface.co/CHENLIKAI/AAPL_esm-2-t12'
     )
     parser.add_argument(
         '--model_type', '-m', default='CNN1D+Linear',
@@ -193,6 +205,7 @@ def main():
     # -- 2. Load predictor ----------------------------------------------
     predictor = AAPPredictor(
         clsPath=args.cls_model,
+        esmPath=args.esm_model,
         modelType=args.model_type,
         esmType=args.esm_type,
         paddingNum=args.padding_num,

@@ -28,26 +28,23 @@ This repository provides **inference-only** scripts to predict whether a given p
 
 ## 📦 Download Pre-trained Weights
 
-The classifier weights (`cls.pt`) for each model variant are hosted on Hugging Face:
+Our pre-trained model weights (including classifier and fine-tuned ESM backbone) are hosted on Hugging Face:
 
-> 🤗 **[Download from Hugging Face — TODO: add link after upload]**
+> 🤗 **[Download from Hugging Face](https://huggingface.co/CHENLIKAI/AAPL_esm-2-t12)**
 
-After downloading, place the files as follows:
+After downloading, place the files in your project directory as follows:
 
 ```
 AAP/
-└── pretrained_weights/
-    ├── CNN1D+Linear/
-    │   └── cls.pt
-    ├── CNN1D+Linear_NoConv2/
-    │   └── cls.pt
-    ├── CNN1D+Linear_NoFC1/
-    │   └── cls.pt
-    └── CNN1D+Linear_NoBN/
-        └── cls.pt
+└── model/
+    └── CNN1D+Linear/
+        ├── cls_34.pt
+        └── esm_34.pt
 ```
 
-> **Note:** The ESM2 backbone is **automatically downloaded** by the `esm` library on first run (cached to `~/.cache/torch/hub/`). No manual download required.
+> **Note:** 
+> - If you use our default fine-tuned model, both `cls_34.pt` and `esm_34.pt` are required.
+> - If you wish to use a raw pre-trained ESM2 backbone without fine-tuning, you can bypass the `esm_34.pt` weights (e.g. by setting `--esm_model none`).
 
 ---
 
@@ -75,12 +72,12 @@ pip install -r env_install/package-list.txt
 
 ## 🚀 Usage
 
-### Input from FASTA
+### Input from FASTA (Default Mode)
+
+By default, the script loads the CNN1D+Linear model from `model/CNN1D+Linear/`:
 
 ```bash
-python predict.py \
-  --input example_input/example.fasta \
-  --cls_model pretrained_weights/CNN1D+Linear/cls.pt
+python predict.py --input example_input/example.fasta
 ```
 
 You will be prompted to specify the label for sequences in the FASTA file:
@@ -94,14 +91,12 @@ You will be prompted to specify the label for sequences in the FASTA file:
    ✅ Label set to 1 (Positive / AAP)
 ```
 
-### Input from CSV
+### Input from CSV (Default Mode)
 
 Your CSV must contain a `seq` column. A `label` column is optional.
 
 ```bash
-python predict.py \
-  --input my_sequences.csv \
-  --cls_model pretrained_weights/CNN1D+Linear/cls.pt
+python predict.py --input my_sequences.csv
 ```
 
 ### Full Options
@@ -109,11 +104,12 @@ python predict.py \
 ```bash
 python predict.py \
   --input      example_input/example.fasta \   # Input file (.fasta, .fa, or .csv)
-  --cls_model  pretrained_weights/CNN1D+Linear/cls.pt \  # Classifier weights
-  --model_type CNN1D+Linear \                  # Model variant (default: CNN1D+Linear)
-  --esm_type   t12 \                           # ESM2 backbone (default: t12)
+  --cls_model  model/CNN1D+Linear/cls_34.pt \  # Classifier weights (default)
+  --esm_model  model/CNN1D+Linear/esm_34.pt \  # Fine-tuned ESM weights (default, use 'none' for raw ESM2)
+  --model_type CNN1D+Linear \                  # Model architecture (default)
+  --esm_type   t12 \                           # ESM2 backbone variant (default: t12)
   --threshold  0.5 \                           # Decision threshold (default: 0.5)
-  --batch_size 16 \                            # Batch size (default: 16)
+  --batch_size 16 \                            # Inference batch size (default: 16)
   --output     prediction_result.csv           # Output CSV path
 ```
 
@@ -144,6 +140,8 @@ CELDENNTPMC,1,0.3012,0
 ```
 AAP/
 ├── predict.py                  ← Main entry point (CLI)
+├── model/
+│   └── CNN1D+Linear/           ← Default model weights (cls_34.pt, esm_34.pt)
 ├── mainclass/
 │   ├── model.py                ← Shared model architecture
 │   └── predictor.py            ← Inference engine

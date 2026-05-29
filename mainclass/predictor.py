@@ -56,6 +56,7 @@ class AAPPredictor:
     def __init__(
         self,
         clsPath: str,
+        esmPath: str = None,
         modelType: str = 'CNN1D+Linear',
         esmType: str = 't12',
         paddingNum: int = 70,
@@ -86,6 +87,16 @@ class AAPPredictor:
         import esm as esmLib
         esmFn = getattr(esmLib.pretrained, cfg['fn'])
         self.esmModel, alphabet = esmFn()
+        if esmPath and esmPath.lower() != 'none':
+            if not os.path.isfile(esmPath):
+                raise FileNotFoundError(f"ESM weights not found at: {esmPath}")
+            print(f"[Info] Loading fine-tuned ESM weights: {esmPath}")
+            self.esmModel.load_state_dict(
+                torch.load(esmPath, map_location=device)
+            )
+            print("[OK] Fine-tuned ESM weights loaded.")
+        else:
+            print("[Info] Using raw pretrained ESM2 backbone (no fine-tuning weights loaded).")
         self.esmModel = self.esmModel.to(device)
         self.esmModel.eval()
         self.batchConverter = alphabet.get_batch_converter()

@@ -4,7 +4,7 @@
 
 # Local ESM2 pretrain model files (auto-downloaded at runtime; too large for git)
 esm_pretrain_model/
-
+finalResult/
 # Internal handover document (not for public)
 forHandoverREADME.txt
 舊版/
@@ -28,8 +28,8 @@ score/
 pic/
 
 # Trained model checkpoints directory (use Hugging Face instead)
-model/
 ModelDetail/
+model/
 
 # Office temp files & analysis outputs
 ~$*
